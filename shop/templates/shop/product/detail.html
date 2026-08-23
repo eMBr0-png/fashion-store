@@ -1,0 +1,54 @@
+{% extends "shop/base.html" %}
+
+{% block title %}{{ product.name }} | Yarik Shop{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="img-fluid rounded shadow" alt="{{ product.name }}">
+        {% else %}
+            <div class="bg-secondary d-flex align-items-center justify-content-center rounded" style="height: 400px;">
+                <span class="text-white">Нет фото</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-6">
+        <h1>{{ product.name }}</h1>
+        <p class="text-muted">{{ product.category.name }}</p>
+
+        <div class="mb-3">
+            {% if product.discount_price %}
+                <span class="old-price fs-5">{{ product.price }} €</span>
+                <span class="price fs-3 ms-2">{{ product.discount_price }} €</span>
+                <span class="badge bg-danger ms-2">-{{ product.get_discount_percent }}%</span>
+            {% else %}
+                <span class="price fs-3">{{ product.price }} €</span>
+            {% endif %}
+        </div>
+
+        <p>{{ product.description|linebreaks }}</p>
+
+        <p class="text-muted">В наличии: {{ product.stock }} шт.</p>
+
+        <form action="{% url 'shop:cart_add' product.id %}" method="post" class="mt-4">
+            {% csrf_token %}
+            <div class="row g-2 align-items-end">
+                <div class="col-auto">
+                    <label for="id_quantity" class="form-label">Количество</label>
+                    <select name="quantity" id="id_quantity" class="form-select" style="width: 100px;">
+                        {% for i in "xxxxxxxxxx" %}
+                            <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <input type="hidden" name="override" value="false">
+                    <button type="submit" class="btn btn-dark btn-lg">Добавить в корзину</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

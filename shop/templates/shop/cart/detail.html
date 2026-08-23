@@ -1,0 +1,57 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Корзина | Yarik Shop{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Ваша корзина</h2>
+
+{% if cart %}
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Товар</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                    <th>Сумма</th>
+                    <th>Удалить</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                    {% with product=item.product %}
+                    <tr>
+                        <td>
+                            <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+                                {{ product.name }}
+                            </a>
+                        </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price }} €</td>
+                        <td>{{ item.total_price }} €</td>
+                        <td>
+                            <form action="{% url 'shop:cart_remove' product.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endwith %}
+                {% endfor %}
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">Итого:</td>
+                    <td colspan="2" class="fw-bold">{{ cart.get_total_price }} €</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+        <a href="/" class="btn btn-outline-dark">Продолжить покупки</a>
+        <button class="btn btn-dark" disabled>Оформить заказ (скоро)</button>
+    </div>
+{% else %}
+    <p class="text-muted">Корзина пуста.</p>
+    <a href="/" class="btn btn-dark">Перейти к товарам</a>
+{% endif %}
+{% endblock %}
