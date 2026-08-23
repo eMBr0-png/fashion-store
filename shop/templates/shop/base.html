@@ -20,17 +20,42 @@
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/">SKYLINCOV GROUP SHOP</a>
-            <div class="navbar-nav ms-auto">
-    <a class="nav-link" href="/">Все товары</a>
-    <a class="nav-link" href="{% url 'shop:cart_detail' %}">
-        Корзина
-        {% if cart|length > 0 %}
-            <span class="badge bg-danger">{{ cart|length }}</span>
-        {% endif %}
-    </a>
-</div>
+            <div class="navbar-nav ms-auto align-items-center">
+                <a class="nav-link" href="/">Все товары</a>
+                <a class="nav-link" href="{% url 'shop:cart_detail' %}">
+                    Корзина
+                    {% if cart|length > 0 %}
+                        <span class="badge bg-danger">{{ cart|length }}</span>
+                    {% endif %}
+                </a>
+
+                {% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'shop:order_list' %}">Мои заказы</a>
+                    <span class="nav-link">Привет, {{ user.username }}</span>
+                    <form action="{% url 'shop:logout' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link nav-link py-0">
+                            Выйти
+                        </button>
+                    </form>
+                {% else %}
+                    <a class="nav-link" href="{% url 'shop:login' %}">Войти</a>
+                    <a class="nav-link" href="{% url 'shop:register' %}">Регистрация</a>
+                {% endif %}
+            </div>
         </div>
     </nav>
+
+    {% if messages %}
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="container">
         {% block content %}

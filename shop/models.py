@@ -76,6 +76,14 @@ class Order(models.Model):
     created = models.DateTimeField('Создан', auto_now_add=True)
     updated = models.DateTimeField('Обновлен', auto_now=True)
     paid = models.BooleanField('Оплачен', default=False)
+    user = models.ForeignKey(
+        'auth.User',
+        related_name='orders',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='Пользователь'
+    )
 
     class Meta:
         verbose_name = 'Заказ'
