@@ -1,0 +1,12 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Заказ оформлен | Yarik Shop{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h2 class="mb-3">Спасибо за заказ!</h2>
+    <p class="lead">Ваш заказ <strong>№{{ order.id }}</strong> успешно оформлен.</p>
+    <p class="text-muted">Мы свяжемся с вами в ближайшее время для подтверждения.</p>
+    <a href="/" class="btn btn-dark mt-3">Вернуться в магазин</a>
+</div>
+{% endblock %}

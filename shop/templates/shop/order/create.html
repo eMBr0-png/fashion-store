@@ -1,0 +1,77 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Оформление заказа | Yarik Shop{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Оформление заказа</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <form method="post" class="card card-body shadow-sm">
+            {% csrf_token %}
+            
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.first_name.label }}</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.last_name.label }}</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.email.label }}</label>
+                    {{ form.email }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">{{ form.phone.label }}</label>
+                    {{ form.phone }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label">{{ form.address.label }}</label>
+                    {{ form.address }}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">{{ form.postal_code.label }}</label>
+                    {{ form.postal_code }}
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">{{ form.city.label }}</label>
+                    {{ form.city }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-dark btn-lg mt-4">Подтвердить заказ</button>
+        </form>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                Ваш заказ
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for item in cart %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                        <span>{{ item.total_price }} €</span>
+                    </li>
+                {% endfor %}
+                <li class="list-group-item d-flex justify-content-between fw-bold">
+                    <span>Итого</span>
+                    <span>{{ cart.get_total_price }} €</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    input, select, textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+    }
+</style>
+{% endblock %}

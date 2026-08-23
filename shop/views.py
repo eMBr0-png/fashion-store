@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Category, Product
+from .models import Category, Product, OrderItem
 from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
 from .cart import Cart
-from .forms import CartAddProductForm
+from .forms import CartAddProductForm, OrderCreateForm
 
 
 def product_list(request, category_slug=None):
@@ -53,3 +53,28 @@ def cart_remove(request, product_id):
 def cart_detail(request):
     cart = Cart(request)
     return render(request, 'shop/cart/detail.html', {'cart': cart})
+
+def order_create(request):
+    cart = Cart(request)
+    if request.method == 'POST':
+        form = OrderCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save()
+            for item in cart:
+                OrderItem.objects.create(
+                    order=order,
+                    product=item['product'],
+                    price=item['price'],
+                    quantity=item['quantity']
+                )
+                product = item['product']
+                product.stock -= item['quantity']
+                product.save()
+            cart.clear()
+            return render(request, 'shop/order/created.html', {'order': order})
+    else:
+        form = OrderCreateForm()
+    return render(request, 'shop/order/create.html', {
+        'cart': cart,
+        'form': form
+    })

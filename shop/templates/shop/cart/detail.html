@@ -48,7 +48,7 @@
 
     <div class="d-flex gap-2 mt-3">
         <a href="/" class="btn btn-outline-dark">Продолжить покупки</a>
-        <button class="btn btn-dark" disabled>Оформить заказ (скоро)</button>
+        <a href="{% url 'shop:order_create' %}" class="btn btn-dark">Оформить заказ</a>
     </div>
 {% else %}
     <p class="text-muted">Корзина пуста.</p>
